@@ -1,5 +1,5 @@
 rsgname   = "azure-functions-test-rg3003"
-location  =  "West Europe"
+location  =  "South India"
 stgacnt   =  "apptestsa30032024"
 serviceplan = "azure-functions-test-service-plan3003"
 laname   =  "test-azure-functions3003"
