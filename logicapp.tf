@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "rsg" {
-  name     = var.regname
+  name     = var.rsgname
   location = var.location
 }
 
