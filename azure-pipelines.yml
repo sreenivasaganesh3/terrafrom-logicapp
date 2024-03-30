@@ -1,0 +1,43 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+- stage: Teststage
+  displayName: "Teststage"
+  jobs:
+  - job: setup
+    steps:
+
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'Free Trial(1)(1f0abf3b-e9bd-4700-b1ae-9bf1a029f1a4)'
+        backendAzureRmResourceGroupName: 'rsg-si'
+        backendAzureRmStorageAccountName: 'saacnt30303'
+        backendAzureRmContainerName: 'terraformstate'
+        backendAzureRmKey: 'terraform.state'
+
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        commandOptions: '-var-file test.tfvars'
+        environmentServiceNameAzureRM: 'Free Trial(1)(1f0abf3b-e9bd-4700-b1ae-9bf1a029f1a4)'
+    - task: TerraformTaskV4@4
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        commandOptions: '-var-file test.tfvars  -auto-approve'
+        environmentServiceNameAzureRM: 'Free Trial(1)(1f0abf3b-e9bd-4700-b1ae-9bf1a029f1a4)'
