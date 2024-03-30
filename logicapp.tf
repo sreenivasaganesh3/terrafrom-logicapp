@@ -1,20 +1,20 @@
-resource "azurerm_resource_group" "example" {
-  name     = "azure-functions-test-rg"
-  location = "West Europe"
+resource "azurerm_resource_group" "rsg" {
+  name     = var.regname
+  location = var.location
 }
 
-resource "azurerm_storage_account" "example" {
-  name                     = "functionsapptestsa"
-  resource_group_name      = azurerm_resource_group.example.name
-  location                 = azurerm_resource_group.example.location
+resource "azurerm_storage_account" "stg" {
+  name                     = var.stgacnt
+  resource_group_name      = var.rsgname
+  location                 = var.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 }
 
-resource "azurerm_app_service_plan" "example" {
-  name                = "azure-functions-test-service-plan"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+resource "azurerm_app_service_plan" "serplan" {
+  name                = var.serviceplan
+  location            = var.location
+  resource_group_name = var.rsgname
   kind                = "elastic"
 
 
@@ -24,13 +24,13 @@ resource "azurerm_app_service_plan" "example" {
   }
 }
 
-resource "azurerm_logic_app_standard" "example" {
-  name                       = "test-azure-functions"
-  location                   = azurerm_resource_group.example.location
-  resource_group_name        = azurerm_resource_group.example.name
-  app_service_plan_id        = azurerm_app_service_plan.example.id
-  storage_account_name       = azurerm_storage_account.example.name
-  storage_account_access_key = azurerm_storage_account.example.primary_access_key
+resource "azurerm_logic_app_standard" "logicapp" {
+  name                       = var.laname
+  location                   = var.location
+  resource_group_name        = var.rsgname
+  app_service_plan_id        = azurerm_app_service_plan.serplan.id
+  storage_account_name       = azurerm_storage_account.stg.name
+  storage_account_access_key = azurerm_storage_account.stg.primary_access_key
 
   app_settings = {
     "FUNCTIONS_WORKER_RUNTIME"     = "node"
