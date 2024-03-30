@@ -19,7 +19,7 @@ resource "azurerm_app_service_plan" "serplan" {
 
 
   sku {
-    tier = "WorkflowStandard"
+    tier = "WorkflowConsumption"
     size = "WS1"
   }
 }
